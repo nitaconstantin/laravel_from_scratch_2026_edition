@@ -1,3 +1,3 @@
 <x-layout>
-    <h1>Hello world!</h1>
+    {{ $greeting }}, {{ $person }}
 </x-layout>
