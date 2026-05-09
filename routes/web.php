@@ -4,35 +4,71 @@ use App\Models\Idea;
 
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function(){
+
+
+// index
+Route::get('/ideas', function(){
   
     // $ideas = Idea::where('state', 'pending')->get();
-    $ideas = Idea::query()
-            ->when(request('state'), function($query, $state){
-                // dd($state);
-                $query->where('state', $state);
-            })->get();
+    $ideas = Idea::all();
 
-    return view('ideas', [
+    return view('ideas.index', [
         'ideas' => $ideas
     ]);
 });
 
+
+// show
+Route::get('/ideas/{idea}', function(Idea $idea){
+  
+    // $ideas = Idea::where('state', 'pending')->get();
+
+    // $idea = Idea::find($id);
+    // if(is_null($idea)){
+    //     abort(404);
+    // }
+    // $idea = Idea::findOrFail($idea); 
+
+    return view('ideas.show', [
+        'idea' => $idea
+    ]);
+});
+
+// edit
+Route::get('/ideas/{idea}/edit', function(Idea $idea){
+
+    return view('ideas.edit', [
+        'idea' => $idea
+    ]);
+});
+
+// update
+Route::patch('/ideas/{idea}', function(Idea $idea){
+    $idea->update([
+        'description' => request('description'),
+    ]);
+
+    return redirect('ideas/'. $idea->id);
+});
+
+
+// store
 Route::post('/ideas', function(){
-    
-    $idea = request('idea');
 
    Idea::create([
-        'description' => request('idea'),
+        'description' => request('description'),
         'state' => 'pending'
 
    ]);
 
-    return redirect('/');
+    return redirect('/ideas');
 });
 
-// Temporary
-Route::get('/delete-ideas', function(){
-    session()->forget('ideas');
-    return redirect('/');
+//destroy
+Route::delete('/ideas/{idea}', function(Idea $idea){
+    
+    $idea->delete($idea->id);
+
+    return redirect('/ideas');
 });
+
