@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\IdeaController;
 use App\Models\Idea;
 
 use Illuminate\Support\Facades\Route;
@@ -7,68 +8,23 @@ use Illuminate\Support\Facades\Route;
 
 
 // index
-Route::get('/ideas', function(){
-  
-    // $ideas = Idea::where('state', 'pending')->get();
-    $ideas = Idea::all();
+Route::get('/ideas', [IdeaController::class, 'index']);
 
-    return view('ideas.index', [
-        'ideas' => $ideas
-    ]);
-});
-
+// create
+Route::get('/ideas/create', [IdeaController::class, 'create']);
 
 // show
-Route::get('/ideas/{idea}', function(Idea $idea){
-  
-    // $ideas = Idea::where('state', 'pending')->get();
-
-    // $idea = Idea::find($id);
-    // if(is_null($idea)){
-    //     abort(404);
-    // }
-    // $idea = Idea::findOrFail($idea); 
-
-    return view('ideas.show', [
-        'idea' => $idea
-    ]);
-});
+Route::get('/ideas/{idea}',[IdeaController::class, 'show']);
 
 // edit
-Route::get('/ideas/{idea}/edit', function(Idea $idea){
-
-    return view('ideas.edit', [
-        'idea' => $idea
-    ]);
-});
-
-// update
-Route::patch('/ideas/{idea}', function(Idea $idea){
-    $idea->update([
-        'description' => request('description'),
-    ]);
-
-    return redirect('ideas/'. $idea->id);
-});
-
+Route::get('/ideas/{idea}/edit', [IdeaController::class, 'edit']);
 
 // store
-Route::post('/ideas', function(){
+Route::post('/ideas',[IdeaController::class, 'store']);
 
-   Idea::create([
-        'description' => request('description'),
-        'state' => 'pending'
-
-   ]);
-
-    return redirect('/ideas');
-});
+// update
+Route::patch('/ideas/{idea}',[IdeaController::class, 'update']);
 
 //destroy
-Route::delete('/ideas/{idea}', function(Idea $idea){
-    
-    $idea->delete($idea->id);
-
-    return redirect('/ideas');
-});
+Route::delete('/ideas/{idea}',[IdeaController::class, 'destroy']);
 
