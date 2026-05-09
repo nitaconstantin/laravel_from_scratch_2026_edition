@@ -1,22 +1,32 @@
 <?php
 
+use App\Models\Idea;
 
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function(){
-    $ideas = session()->get('ideas', []);
+  
+    // $ideas = Idea::where('state', 'pending')->get();
+    $ideas = Idea::query()
+            ->when(request('state'), function($query, $state){
+                // dd($state);
+                $query->where('state', $state);
+            })->get();
 
-    // dd('ideas');
     return view('ideas', [
         'ideas' => $ideas
     ]);
 });
 
 Route::post('/ideas', function(){
-    // dd(request()->all());
+    
     $idea = request('idea');
 
-    session()->push('ideas', $idea);
+   Idea::create([
+        'description' => request('idea'),
+        'state' => 'pending'
+
+   ]);
 
     return redirect('/');
 });
