@@ -53,9 +53,9 @@ Route::post('/login', [SessionController::class, 'store']);
 //     return 'Private admin only area';
 // })->can('view-admin');
 
-Route::get('/admin', function(){
-    Gate::authorize('view-admin');
-});
+// Route::get('/admin', function(){
+//     Gate::authorize('view-admin');
+// });
 
 
 
