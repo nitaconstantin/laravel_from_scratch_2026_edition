@@ -4,7 +4,7 @@ use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\SessionController;
 use App\Http\Controllers\IdeaController;
 use App\Models\Idea;
-
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Route;
 
 
@@ -48,6 +48,16 @@ Route::post('/register', [RegisteredUserController::class, 'store']);
 Route::get('/login', [SessionController::class, 'create']);
 Route::post('/login', [SessionController::class, 'store']);
 });
+
+// Route::get('/admin', function(){
+//     return 'Private admin only area';
+// })->can('view-admin');
+
+Route::get('/admin', function(){
+    Gate::authorize('view-admin');
+});
+
+
 
 
 
